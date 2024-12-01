@@ -7,14 +7,21 @@
 #define Max(a, b) ((a) > (b) ? (a) : (b))
 #define ind(i, j, k) ((i) * L * L + (j) * L + (k))
 
-#define L 500
-#define ITMAX 100
 
 int i, j, k, it;
 double eps;
 double MAXEPS = 0.5f;
 
 int main(int argc, char **argv) {
+  if(argc < 4){
+    std::cout<<"./exec file_output|false 500 100" << std::endl;
+    return 1;
+  }
+  bool file_output =  std::string(argv[1]) == std::string("file_output");
+  int L = std::stoi(argv[2]);
+  int ITMAX = std::stoi(argv[3]);
+    
+
   std::chrono::steady_clock::time_point begin =
       std::chrono::steady_clock::now();
 
@@ -71,23 +78,28 @@ int main(int argc, char **argv) {
 
   std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
 
+  std::cout << "Size = " << L << std::endl;
   std::cout << "Time difference = "
             << std::chrono::duration_cast<std::chrono::milliseconds>(end -
                                                                      begin)
                    .count()
             << "[ms]" << std::endl;
 
-  std::ofstream dump_file(std::string(argv[0]) + ".dump", std::ios::trunc);
-  if (dump_file.is_open()) {
-    for (i = 0; i < L; i++)
-      for (j = 0; j < L; j++)
-        for (k = 0; k < L; k++) dump_file << A[ind(i, j, k)];
 
-    for (i = 0; i < L; i++)
-      for (j = 0; j < L; j++)
-        for (k = 0; k < L; k++) dump_file << B[ind(i, j, k)];
-  }
-  dump_file.close();
+
+  if(file_output){
+    std::ofstream dump_file(std::string(argv[0]) + ".dump", std::ios::trunc);
+    if (dump_file.is_open()) {
+      for (i = 0; i < L; i++)
+        for (j = 0; j < L; j++)
+          for (k = 0; k < L; k++) dump_file << A[ind(i, j, k)];
+
+      for (i = 0; i < L; i++)
+        for (j = 0; j < L; j++)
+          for (k = 0; k < L; k++) dump_file << B[ind(i, j, k)];
+    }
+    dump_file.close();
+    }
 
   return 0;
 }

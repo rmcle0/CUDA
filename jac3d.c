@@ -6,7 +6,7 @@
 
 #define Max(a, b) ((a) > (b) ? (a) : (b))
 
-#define L 500
+#define L 400
 #define ITMAX 100
 
 int i, j, k, it;

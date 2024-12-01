@@ -5,7 +5,10 @@ all: default consequential thrust
 launch: default consequential thrust 
 	mpisubmit.pl default 
 	mpisubmit.pl consequential
-	bsub -oo "thrust.txt" -gpu "num=1:mode=exclusive_process" ./thrust
+	bsub -oo "thrust.txt" -gpu "num=1:mode=exclusive_process" ./thrust none 500 100
+
+launchthread:
+	bsub -oo "thrust.txt" -gpu "num=1:mode=exclusive_process" ./thrust none 500 100
 
 
 default: jac3d.c 
@@ -21,7 +24,7 @@ clean:
 	rm -f *.dump *.err *.out .*o *.exe
 	
 send:
-	scp -i /home/sdev/.ssh/id_rsa_hpc   *.c *.cpp *.cu  Makefile edu-cmc-skmodel24-607-01@polus.hpc.cs.msu.ru:/home_edu/edu-cmc-skmodel24-607/edu-cmc-skmodel24-607-01/CUDA1
+	scp -i /home/sdev/.ssh/id_rsa_hpc *.sh   *.c *.cpp *.cu  Makefile edu-cmc-skmodel24-607-01@polus.hpc.cs.msu.ru:/home_edu/edu-cmc-skmodel24-607/edu-cmc-skmodel24-607-01/CUDA1
 
 
 compare:
@@ -31,3 +34,7 @@ print:
 	clear
 	cat test*.out
 	cat test*.err
+
+
+perftest: thrust  consequential
+	./perftest.sh
